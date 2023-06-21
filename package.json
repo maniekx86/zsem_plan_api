@@ -1,0 +1,27 @@
+{
+  "name": "zsem_plan_api",
+  "version": "1.0.0",
+  "description": "Web scraper for ZSEM Nowy Sacz timetable",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "start:dev": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maniekx86/zsem_plan_api.git"
+  },
+  "author": "maniek86",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maniekx86/zsem_plan_api/issues"
+  },
+  "homepage": "https://github.com/maniekx86/zsem_plan_api#readme",
+  "dependencies": {
+    "jsdom": "^22.1.0",
+    "node-schedule": "^2.1.1"
+  },
+  "engines" : { 
+    "node" : ">=17.0.0"
+  }
+}
