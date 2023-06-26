@@ -25,7 +25,12 @@ var theInterval = setInterval(function() {
     }
 }, 500);
 
-
+app.use((req, res, next) => {
+    res.append('Access-Control-Allow-Origin', ['*']);
+    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.append('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 app.listen(config.port, () => {
   console.log(`Serwer dziala na porcie ${config.port}`);

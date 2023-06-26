@@ -10,7 +10,7 @@ const https = require('https');
 
 
 function nazwaPrzedmiotu(przedmiot) { // Konwersja skroconej nazwy przedmiotu na pelna 
-    // Oznaczenie ?? oznacza przedmioty ktorych nie znam albo nie jestem pewny
+    // Oznaczenie ?? oznacza przedmioty ktorych nie znam albo nie jestem pewny, prosilbym o pomoc z tym
     switch(przedmiot) {
         case "biologia": return "Biologia";
         case "j.ang": return "Język angielski";
@@ -42,41 +42,41 @@ function nazwaPrzedmiotu(przedmiot) { // Konwersja skroconej nazwy przedmiotu na
         case "j.ang.zaw": return "Język angielski zawodowy";
         case "r_fizyka": return "Fizyka";
 
-        case "podst.infor": return "Podstawy informatyki"; // ??
+        case "podst.infor": return "Podstawy informatyki"; 
         case "pra.str.apk": return "pra.str.apk"; // ??
         case "prac.baz.dan": return "prac.baz.dan"; // ??
         case "inst.elektr": return "Instalacje elektryczne"; // ??
-        case "adm.sys.op": return "Administracja systemów operacyjnych"; // ??
-        case "e.urz.t.komp": return "e.urz.t.komp"; // ??
-        case "lok.sie.komp": return "lok.sie.komp"; // ??
+        case "adm.sys.op": return "Administracja systemami operacyjnymi"; // ??
+        case "e.urz.t.komp": return "Eksploatacja urządzeń techniki komputerowej"; 
+        case "lok.sie.komp": return "Lokalne sieci komputerowe"; 
         case "Sys.op": return "Systemy operacyjne";
-        case "UTK": return "UTK"; // ??
+        case "UTK": return "Urządzenia techniki komputerowej"; 
         case "syst.bd": return "Systemy baz danych"; // ??
-        case "pom.elektr.e": return "Pomiary elektryczne"; // ??
-        case "syst.telew": return "syst.telew"; // ??
+        case "pom.elektr.e": return "Pomiary elektryczne i elektroniczne"; // ??
+        case "syst.telew": return "Systemy telewizyjne"; 
         case "maszyny.el": return "maszyny.el"; // ??
-        case "syst.KD": return "syst.KD"; // ??
+        case "syst.KD": return "Systemy kontroli dostępu"; 
         case "ap.i.urz.ele": return "ap.i.urz.ele"; // ?? wtf
         case "syst.sieci.k": return "syst.sieci.k"; // ??
         case "mon.konf.lan": return "mon.konf.lan"; // ??
-        case "techn.i.k.me": return "techn.i.k.me"; // ??
+        case "techn.i.k.me": return "Technologie i konstrukcje mechaniczne";
         case "urz.i.syst.m": return "urz.i.syst.m"; // ??
         case "str.apk.int": return "str.apk.int"; // ??
-        case "sieci.komp": return "Sieci komputerowe"; // ??
+        case "sieci.komp": return "Sieci komputerowe"; 
         case "a.s.sys.komp": return "a.s.sys.komp"; // ??
-        case "witr.i.apl.i": return "witr.i.apl.i"; // ??
+        case "witr.i.apl.i": return "Witryny i aplikacje internetowe"; // ??
         case "pneum.i.hydr": return "pneum.i.hydr"; // ??
         case "prog.str.obi": return "prog.str.obi"; // ??
         case "prac.apk.web": return "prac.apk.web"; // ??
-        case "m.ur.sys.t.d": return "m.ur.sys.t.d"; // ??
-        case "kon.sys.komu": return "kon.sys.komu"; // ??
-        case "konf.urz.sie": return "konf.urz.sie"; // ??
-        case "sys.tran.dan": return "sys.tran.dan"; // ??
-        case "sys.kom": return "sys.kom"; // ??
+        case "m.ur.sys.t.d": return "Montaż i użytkowanie systemów transmisji danych"; // ??
+        case "kon.sys.komu": return "Konfiguracja systemów komutacyjnych"; // ??
+        case "konf.urz.sie": return "Konfiguracja urządzeń sieciowych"; 
+        case "sys.tran.dan": return "Systemy transmisji danych"; 
+        case "sys.kom": return "Systemy komputerowe"; // ?? (czy systemy komutacyjne?)
         case "pr.te.do.apk": return "pr.te.do.apk"; // ??
-        case "prog.apk.mob": return "Programowanie aplikacji mobilnych"; // ??
-        case "Pr.urz.mikr": return "Pr.urz.mikr"; // ??
-        case "t.st.apk.int": return "t.st.apk.int"; // ??
+        case "prog.apk.mob": return "Programowanie aplikacji mobilnych"; 
+        case "Pr.urz.mikr": return "Pracownia urządzeń mikroprocesorowych"; 
+        case "t.st.apk.int": return "Tworzenie stron i aplikacji interentowych"; 
         case "proj.b.dan": return "Projektowanie baz danych"; //??
         //case "": return "";
         default: return przedmiot+"(ERR)";
@@ -118,6 +118,8 @@ function czyInternat(sala) {
         case "pr.inf. 107": return 1;
         case "pr.inf. 108": return 1;
         case "pr.inf. 109": return 1;
+        case "SKat": return 2;
+
         //case "": return 1;
         default: return 0;
     }
@@ -335,7 +337,7 @@ exports.scrape = async () => {
         klasa_pelna_nazwa=klasa.substring(klasa.indexOf(ssp)+ssp.length);
         if(klasa_pelna_nazwa.startsWith("1")||klasa_pelna_nazwa.startsWith("2")||klasa_pelna_nazwa.startsWith("3")||klasa_pelna_nazwa.startsWith("4")) klasa_pelna_nazwa=klasa_pelna_nazwa.substring(1); // Pozbycie sie numeru poczatku nazwy klas 
         klasa_id=newData.klasy[newData.klasy.findIndex(x => x.nazwa === klasa_nazwa)].id;
-        console.log(`Parsowanie klasy ${klasa_nazwa} (${p}/${newData.klasy.length})`);
+        console.log(`Parsowanie klasy ${klasa_nazwa} (${p+1}/${newData.klasy.length})`);
 
         var table = document.getElementsByClassName("tabela")[0];
         var acells = table.querySelectorAll("tr");
@@ -354,7 +356,7 @@ exports.scrape = async () => {
                 if(i==0) return;
                 if(n.nodeType !== 1) return;
 
-                var insObj={leckja: i};
+                var insObj={lekcja: i};
 
                 var spanLen = n.querySelectorAll("span").length; // 2 i wiecej spanow to jest podzial 
 
@@ -380,21 +382,24 @@ exports.scrape = async () => {
                         salaStr=salaE.getAttribute("href");
                     }
                     ///
-                    var salaId, nazwaSali;
+                    var salaId, salaObj;
                     try {
                         salaId=Number(salaStr.substring(salaStr.indexOf("s") + 1, salaStr.lastIndexOf(".html")));
-                        nazwaSali=newData.sale[newData.sale.findIndex(x => x.id === salaId)].nazwa; // wykorzystajmy nazwe sali z strony sal
+                        salaObj=newData.sale[newData.sale.findIndex(x => x.id === salaId)]; // wykorzystajmy nazwe sali z strony sal
                     } catch(e) { // nie ma takiej sali?
                         salaId=-1;
-                        nazwaSali="";
+                        salaObj.id=-1;
+                        salaObj.nazwaSali="";
+                        salaObj.czyInternat=0;
+                        salaObj.numer="";
                         console.log(`Ostrzezenie podczas parsowania: sala ${salaStr} nie istnieje`);
                     }
-                    
+
                     insObj.sala={
                         id: salaId,
-                        nazwa: nazwaSali,
-                        internat: czyInternat(nazwaSali),
-                        numer: nazwaNaNumer(nazwaSali)
+                        nazwa: salaObj.nazwaSali,
+                        internat: salaObj.czyInternat,
+                        numer: salaObj.numer
                     }
 
                     // Nauczyciel
@@ -445,21 +450,24 @@ exports.scrape = async () => {
                         }
                         ///
 
-                        var salaId, nazwaSali;
+                        var salaId, salaObj;
                         try {
                             salaId=Number(salaStr.substring(salaStr.indexOf("s") + 1, salaStr.lastIndexOf(".html")));
-                            nazwaSali=newData.sale[newData.sale.findIndex(x => x.id === salaId)].nazwa; // wykorzystajmy nazwe sali z strony sal
+                            salaObj=newData.sale[newData.sale.findIndex(x => x.id === salaId)]; // wykorzystajmy nazwe sali z strony sal
                         } catch(e) { // nie ma takiej sali?
                             salaId=-1;
-                            nazwaSali="";
+                            salaObj.id=-1;
+                            salaObj.nazwaSali="";
+                            salaObj.czyInternat=0;
+                            salaObj.numer="";
                             console.log(`Ostrzezenie podczas parsowania: sala ${salaStr} nie istnieje`);
                         }
 
                         insObj["grupa"+grupa].sala={
                             id: salaId,
-                            nazwa: nazwaSali,
-                            internat: czyInternat(nazwaSali),
-                            numer: nazwaNaNumer(nazwaSali)
+                            nazwa: salaObj.nazwaSali,
+                            internat: salaObj.czyInternat,
+                            numer: salaObj.numer
                         }
 
                         // Nauczyciel
@@ -515,6 +523,7 @@ exports.scrape = async () => {
     newData.ok=1;
     
     //console.dir(newData, { depth: null });
+    console.log("Scrapowanie gotowe");
 
     return newData;
         

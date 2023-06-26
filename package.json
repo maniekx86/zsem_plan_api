@@ -18,10 +18,11 @@
   },
   "homepage": "https://github.com/maniekx86/zsem_plan_api#readme",
   "dependencies": {
+    "express": "^4.18.2",
     "jsdom": "^22.1.0",
     "node-schedule": "^2.1.1"
   },
-  "engines" : { 
-    "node" : ">=17.0.0"
+  "engines": {
+    "node": ">=17.0.0"
   }
 }

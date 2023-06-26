@@ -258,3 +258,4 @@ Aby sprawdzić czy lekcja ma podział grupowy wystarczy po prostu sprawdzić cz
 - API planu lekcji dla nauczycieli (getTeacherTimetable / getCurrentTeacherLesson)
 - API dyżurów (są dostępne na planie lekcji ale nie wiem czy było by to jakoś potrzebne)
 - Obsługa skróconych lekcji (dość często teraz lekcje były skracane)
+- Obsługa zastępstw (zsem.edu.pl/zastepstwa)

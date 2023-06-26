@@ -331,7 +331,7 @@ function getTimetable(req, res) {
         selectedClass = klasy.find(obj => obj.id === classId);
     
         if (!selectedClass) {
-            return res.status(404).send('Classroom not found');
+            return res.status(404).send('Class not found');
         }
     } else {
         return res.status(400).send('Bad request');
@@ -374,7 +374,7 @@ function getCurrentLesson(req, res) {
         selectedClass = klasy.find(obj => obj.id === classId);
     
         if (!selectedClass) {
-            return res.status(404).send('Classroom not found');
+            return res.status(404).send('Class not found');
         }
     } else {
         return res.status(400).send('Bad request');
