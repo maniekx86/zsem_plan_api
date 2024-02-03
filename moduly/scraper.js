@@ -278,7 +278,7 @@ exports.scrape = async () => {
 
     // 3. ss2.php/sss.php - Sale
     console.log("Parsowanie sal");
-    result = await fetchURL("ss2.php");
+    result = await fetchURL("sss.php");
 
     var { document } = new JSDOM(result).window;
     
@@ -308,6 +308,7 @@ exports.scrape = async () => {
 
     // Ta sala nie znajduje sie na ss2.php, musimy ja recznie dodac
     newData.sale.push({id: 43, nazwa: "Salka Katechetyczna w kościele NSPJ", czyInternat: 2, link: "plany/s43.html", numer: "SKat"});
+    console.log(newData.sale);
 
     /// -- Plany lekcji --
     // Sam plan lekcji: plany/o*.html
@@ -388,6 +389,7 @@ exports.scrape = async () => {
                         salaObj=newData.sale[newData.sale.findIndex(x => x.id === salaId)]; // wykorzystajmy nazwe sali z strony sal
                     } catch(e) { // nie ma takiej sali?
                         salaId=-1;
+                        salaObj = {};
                         salaObj.id=-1;
                         salaObj.nazwaSali="";
                         salaObj.czyInternat=0;
@@ -426,8 +428,12 @@ exports.scrape = async () => {
                     var allspans=n.querySelectorAll(":scope > span"); // zeby nie szukalo spanow w spanach
 
                     allspans.forEach(function(theSpan,z, listObj) { // Dla kazdego spanu (Grupy)
-                        
-                        var spantxt=theSpan.querySelector("span").textContent;
+                        try {
+                            var spantxt=theSpan.querySelector("span").textContent;
+                        } catch(e) {
+                            console.log(`Ostrzezenie podczas parsowania: blad html cos nie tak:\n` + theSpan.innerHTML); 
+                            return;
+                        }                    
                         var ttxt=spantxt.substring(0,spantxt.length-4);
                         var grupa=spantxt.substring(spantxt.length-3,spantxt.length-2); // Pobranie numeru grupy (string!)
 
@@ -456,6 +462,7 @@ exports.scrape = async () => {
                             salaObj=newData.sale[newData.sale.findIndex(x => x.id === salaId)]; // wykorzystajmy nazwe sali z strony sal
                         } catch(e) { // nie ma takiej sali?
                             salaId=-1;
+                            salaObj = {};
                             salaObj.id=-1;
                             salaObj.nazwaSali="";
                             salaObj.czyInternat=0;
