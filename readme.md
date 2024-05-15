@@ -1,6 +1,6 @@
 # ZSEM_PLAN_API
 Scraper i eksperymentalne nieoficjalne API dla planu lekcji Zespołu Szkół Elektryczno-Mechanicznych w Nowym Sączu (https://zsem.edu.pl/plany)<br>
-Kod jest napisany (i planowany) aby robić jak najmniejszą liczbe zapytań na stronę szkoły
+Kod jest napisany (i planowany) aby robić jak najmniejszą liczbę zapytań na stronę szkoły
 
 
 # Wymagania
@@ -9,7 +9,7 @@ Kod jest napisany (i planowany) aby robić jak najmniejszą liczbe zapytań na s
 # Konfiguracja
 Konfiguracja znajduje się w pliku `moduly/config.js`. Są tam:
 - `port` - port serwera Express
-- `dataFile` - lokalizacja pliku z zescrapowanym planem lekcji w postacji JSON
+- `dataFile` - lokalizacja pliku z zescrapowanym planem lekcji w postaci JSON
 - `scrapTimeHour` i `scrapTimeMinute` - Dzienna godzina i minuta automatycznego scrapowania planu lekcji
 
 # Instalacja i uruchomienie

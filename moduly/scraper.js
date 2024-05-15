@@ -1,6 +1,6 @@
-// Scraper (2023-06-21)
+// Scraper (2024-05-15)
 // maniek86
-// 2023 (c)
+// 2024 (c)
 // wersja 0.1
 
 // Nadal dziala...
@@ -41,6 +41,7 @@ function nazwaPrzedmiotu(przedmiot) { // Konwersja skroconej nazwy przedmiotu na
         case "p.przedsięb.": return "Podstawy przedsiębiorczości";
         case "j.ang.zaw": return "Język angielski zawodowy";
         case "r_fizyka": return "Fizyka";
+        case "WOS": return "Wiedza o społeczeństwie";
 
         case "podst.infor": return "Podstawy informatyki"; 
         case "pra.str.apk": return "pra.str.apk"; // ??
@@ -77,7 +78,19 @@ function nazwaPrzedmiotu(przedmiot) { // Konwersja skroconej nazwy przedmiotu na
         case "prog.apk.mob": return "Programowanie aplikacji mobilnych"; 
         case "Pr.urz.mikr": return "Pracownia urządzeń mikroprocesorowych"; 
         case "t.st.apk.int": return "Tworzenie stron i aplikacji interentowych"; 
-        case "proj.b.dan": return "Projektowanie baz danych"; //??
+        case "proj.b.dan": return "Projektowanie baz danych"; // ??
+        case "pra.str.apk.": return "pra.str.apk."; // ??
+        case "podst.progra": return "Podstawy programowania"; // ??
+        case "tech.cyfrowa": return "Technika cyfrowa"; // ?
+        case "prac.apk.mob": return "prac.apk.mob"; // ??
+        case "prog.apk.web": return "prog.apk.web"; // ??
+        case "prog.sys.mik": return "prog.sys.mik"; // ??
+        case "użyt.ins.ele": return "użyt.ins.ele"; // ??
+        case "e.m.u.i.elek": return "e.m.u.i.elek"; // ?? wtf
+        case "sys.mikropr": return "sys.mikropr"; // ??
+        case "pra.p.str.ob": return "pra.p.str.ob"; // ??
+        case "ob.ma.urz.e": return "ob.ma.urz.e";
+        
         //case "": return "";
         default: return przedmiot+"(ERR)";
     }
@@ -211,6 +224,7 @@ const fetchURL = async (url) => { // Pobieranie klas
 /*
 > Fix nazwy sali bez linku "106 (wcześniej pe1)"
 > Recznie dodanie w kodzie "salki Katechetycznej" (id 43), zsem.edu.pl/plany/plany/s43.html
+> Sala nie koniecznie jest tagiem <a>, w takim przypadku bierzemy textContent tagu z klasa 's' jako nazwe sali
 */
 
 
@@ -334,11 +348,19 @@ exports.scrape = async () => {
         if(klasa.indexOf(" - ")==-1) { // separator jest spacja a nie -
             ssp=" ";
         }
+        
+        // FIXY DLA NAZW
         klasa_nazwa=klasa.substring(0,klasa.indexOf(ssp)).toUpperCase();
         klasa_pelna_nazwa=klasa.substring(klasa.indexOf(ssp)+ssp.length);
         if(klasa_pelna_nazwa.startsWith("1")||klasa_pelna_nazwa.startsWith("2")||klasa_pelna_nazwa.startsWith("3")||klasa_pelna_nazwa.startsWith("4")) klasa_pelna_nazwa=klasa_pelna_nazwa.substring(1); // Pozbycie sie numeru poczatku nazwy klas 
-        klasa_id=newData.klasy[newData.klasy.findIndex(x => x.nazwa === klasa_nazwa)].id;
+
+        // id klasy
+        klasa_id=newData.klasy[p].link.split('plany/o')[1].split(".html")[0]; 
+
+
+        klasa_nazwa = newData.klasy[newData.klasy.findIndex(x => x.id == klasa_id)].nazwa;
         console.log(`Parsowanie klasy ${klasa_nazwa} (${p+1}/${newData.klasy.length})`);
+
 
         var table = document.getElementsByClassName("tabela")[0];
         var acells = table.querySelectorAll("tr");
@@ -360,6 +382,12 @@ exports.scrape = async () => {
                 var insObj={lekcja: i};
 
                 var spanLen = n.querySelectorAll("span").length; // 2 i wiecej spanow to jest podzial 
+                
+                // ALE: spotkalem sie z tym ze link do sali moze byc <span> a nie <a>, wiec sprawdzmy czy pierwszy span ma klase 'p', jezeli tak to jednak nie jest to podzial grupowy
+                if(spanLen>1 && n.querySelectorAll("span")[0].className == "p") {
+                    // to nie jest podzial na grupe!
+                    spanLen = 1;
+                }
 
 
                 if(spanLen==1) { ///// Bez podzialu grupowego
@@ -391,10 +419,15 @@ exports.scrape = async () => {
                         salaId=-1;
                         salaObj = {};
                         salaObj.id=-1;
-                        salaObj.nazwaSali="";
                         salaObj.czyInternat=0;
-                        salaObj.numer="";
                         console.log(`Ostrzezenie podczas parsowania: sala ${salaStr} nie istnieje`);
+                        
+                        salaObj.nazwaSali=salaE.textContent;
+                        if(salaObj.nazwaSali.length<=3) {
+                            salaObj.numer=salaObj.nazwaSali;
+                        } else {
+                            salaObj.numer=salaObj.nazwaSali.substring(0,3);
+                        }
                     }
 
                     insObj.sala={
@@ -427,11 +460,11 @@ exports.scrape = async () => {
 
                     var allspans=n.querySelectorAll(":scope > span"); // zeby nie szukalo spanow w spanach
 
-                    allspans.forEach(function(theSpan,z, listObj) { // Dla kazdego spanu (Grupy)
+                    allspans.forEach(function(theSpan, z, listObj) { // Dla kazdego spanu (Grupy)
                         try {
                             var spantxt=theSpan.querySelector("span").textContent;
                         } catch(e) {
-                            console.log(`Ostrzezenie podczas parsowania: blad html cos nie tak:\n` + theSpan.innerHTML); 
+                            console.log(`Ostrzezenie podczas parsowania: (podzial grupowy) blad html, cos nie tak:\n` + theSpan.innerHTML); 
                             return;
                         }                    
                         var ttxt=spantxt.substring(0,spantxt.length-4);
@@ -464,10 +497,17 @@ exports.scrape = async () => {
                             salaId=-1;
                             salaObj = {};
                             salaObj.id=-1;
-                            salaObj.nazwaSali="";
                             salaObj.czyInternat=0;
-                            salaObj.numer="";
                             console.log(`Ostrzezenie podczas parsowania: sala ${salaStr} nie istnieje`);
+                            
+                            // Jako nazwa sali wsadzimy to co jest HTML z dowolnego objektu z klasa s, a numer to 3 pierwszy litery z tego
+                            salaObj.nazwaSali=salaE.textContent;
+                            if(salaObj.nazwaSali.length<=3) {
+                                salaObj.numer=salaObj.nazwaSali;
+                            } else {
+                                salaObj.numer=salaObj.nazwaSali.substring(0,3);
+                            }
+                            
                         }
 
                         insObj["grupa"+grupa].sala={
